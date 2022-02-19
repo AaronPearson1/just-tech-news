@@ -41,15 +41,6 @@ router.get('/', (req, res) => {
         });
 });
 
-router.get('/login', (req, res) => {
-    if (req.session.loggedIn) {
-        res.redirect('/');
-        return;
-    }
-
-    res.render('login');
-});
-
 router.get('/post/:id', (req, res) => {
     Post.findOne({
         where: {
@@ -67,9 +58,9 @@ router.get('/post/:id', (req, res) => {
                 model: Comment,
                 attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
                 include: {
-                model: User,
-                attributes: ['username']
-            }
+                    model: User,
+                    attributes: ['username']
+                }
             },
             {
                 model: User,
@@ -96,6 +87,15 @@ router.get('/post/:id', (req, res) => {
             console.log(err);
             res.status(500).json(err);
         });
+});
+
+router.get('/login', (req, res) => {
+    if (req.session.loggedIn) {
+        res.redirect('/');
+        return;
+    }
+
+    res.render('login');
 });
 
 module.exports = router;
